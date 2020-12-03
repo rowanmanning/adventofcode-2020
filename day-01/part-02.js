@@ -1,12 +1,13 @@
-'use strict';
 
-const readLinesAsIntegers = require('../utils/read-lines-as-integers');
-const compareNumbers = require('../utils/compare-numbers');
+import compareNumbers from '../shared/lib/compare-numbers.js';
+import getDirectoryName from '../shared/lib/get-directory-name.js';
+import readLinesAsIntegers from '../shared/lib/read-lines-as-integers.js';
 
 (async () => {
+	const inputPath = `${getDirectoryName(import.meta.url)}/input.txt`;
 
 	// Load numbers and sort them low to high
-	const numbers = await readLinesAsIntegers(`${__dirname}/input.txt`);
+	const numbers = await readLinesAsIntegers(inputPath);
 	const sortedNumbers = numbers.sort(compareNumbers);
 
 	// Loop over numbers (lol I can't be bothered doing this in a better way, it's beautiful)

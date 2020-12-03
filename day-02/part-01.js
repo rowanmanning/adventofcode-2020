@@ -1,8 +1,9 @@
-'use strict';
 
-const readLines = require('../utils/read-lines');
+import getDirectoryName from '../shared/lib/get-directory-name.js';
+import readLines from '../shared/lib/read-lines.js';
 
 (async () => {
+	const inputPath = `${getDirectoryName(import.meta.url)}/input.txt`;
 
 	// Create a beautiful regular expression
 	const passwordRegExp = /^(?<min>\d+)-(?<max>\d+) (?<character>[a-z]): (?<password>.*)$/;
@@ -25,7 +26,7 @@ const readLines = require('../utils/read-lines');
 	}
 
 	// Load and parse the lines
-	const lines = await readLines(`${__dirname}/input.txt`);
+	const lines = await readLines(inputPath);
 	const passwords = lines.map(parsePasswordString);
 
 	// Filter out invalid passwords and log the length of the resulting array

@@ -1,6 +1,5 @@
-'use strict';
 
-module.exports = function compareNumbers(firstNumber, secondNumber) {
+export default function compareNumbers(firstNumber, secondNumber) {
 	if (firstNumber < secondNumber) {
 		return -1;
 	}
@@ -8,4 +7,4 @@ module.exports = function compareNumbers(firstNumber, secondNumber) {
 		return 1;
 	}
 	return 0;
-};
+}
