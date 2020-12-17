@@ -9,6 +9,6 @@ import PocketDimension3D from './lib/pocket-dimension-3d.js';
 	const dimension = await PocketDimension3D.fromFile(inputPath);
 
 	// Log the result
-	console.log(dimension.simulate(6).activeCellCount);
+	console.log(dimension.simulate(6).populatedCellCount);
 
 })();

@@ -4,10 +4,6 @@ import InfiniteMatrix3D from '../../shared/lib/infinite-matrix-3d.js';
 // 3D pocket dimension
 export default class PocketDimension3D extends InfiniteMatrix3D {
 
-	get activeCellCount() {
-		return this.filter(value => value === PocketDimension3D.#STATE_ACTIVE).populatedCellCount;
-	}
-
 	neighbors(x, y, z) {
 		const neighbors = this.slice(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 		neighbors.delete(x, y, z);
@@ -26,10 +22,7 @@ export default class PocketDimension3D extends InfiniteMatrix3D {
 		let result = this;
 		while (count > 0) {
 			result = result.expand().mapAll((value, [x, y, z]) => {
-				const activeNeighbors = result
-					.neighbors(x, y, z)
-					.filter(cell => cell === PocketDimension3D.#STATE_ACTIVE)
-					.populatedCellCount;
+				const activeNeighbors = result.neighbors(x, y, z).populatedCellCount;
 				if (value === PocketDimension3D.#STATE_ACTIVE) {
 					if (activeNeighbors === 2 || activeNeighbors === 3) {
 						return PocketDimension3D.#STATE_ACTIVE;
@@ -64,6 +57,11 @@ export default class PocketDimension3D extends InfiniteMatrix3D {
 			matrix.push(`z=${z}\n${currentZ.join('\n')}`);
 		}
 		return matrix.join('\n\n');
+	}
+
+	static fromString(string) {
+		const matrix = super.fromString(string);
+		return matrix.filter(value => value === this.#STATE_ACTIVE);
 	}
 
 	static #STATE_ACTIVE = '#';

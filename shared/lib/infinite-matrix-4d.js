@@ -79,10 +79,17 @@ export default class InfiniteMatrix4D {
 	}
 
 	mapAll(mapFunction) {
+		const bounds = this.#bounds;
 		const result = new this.constructor();
-		this.forAll((value, [x, y, z, w]) => {
-			result.set(x, y, z, w, mapFunction(value, [x, y, z, w]));
-		});
+		for (let w = bounds.minW; w <= bounds.maxW; w += 1) {
+			for (let z = bounds.minZ; z <= bounds.maxZ; z += 1) {
+				for (let y = bounds.minY; y <= bounds.maxY; y += 1) {
+					for (let x = bounds.minX; x <= bounds.maxX; x += 1) {
+						result.set(x, y, z, w, mapFunction(this.get(x, y, z, w), [x, y, z, w]));
+					}
+				}
+			}
+		}
 		return result;
 	}
 
@@ -105,14 +112,20 @@ export default class InfiniteMatrix4D {
 	}
 
 	slice(x1, y1, z1, w1, x2, y2, z2, w2) {
-		return this.filter((value, [x, y, z, w]) => {
-			return (
+		const result = new this.constructor();
+		for (const [key, value] of this.#cells.entries()) {
+			const [x, y, z, w] = InfiniteMatrix4D.#parseKey(key);
+			const check = (
 				x >= x1 && x <= x2 &&
 				y >= y1 && y <= y2 &&
 				z >= z1 && z <= z2 &&
 				w >= w1 && w <= w2
 			);
-		});
+			if (check) {
+				result.set(x, y, z, w, value);
+			}
+		}
+		return result;
 	}
 
 	toString() {

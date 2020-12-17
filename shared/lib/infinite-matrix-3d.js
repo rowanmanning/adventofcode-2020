@@ -74,9 +74,14 @@ export default class InfiniteMatrix3D {
 
 	mapAll(mapFunction) {
 		const result = new this.constructor();
-		this.forAll((value, [x, y, z]) => {
-			result.set(x, y, z, mapFunction(value, [x, y, z]));
-		});
+		const bounds = this.bounds;
+		for (let z = bounds.minZ; z <= bounds.maxZ; z += 1) {
+			for (let y = bounds.minY; y <= bounds.maxY; y += 1) {
+				for (let x = bounds.minX; x <= bounds.maxX; x += 1) {
+					result.set(x, y, z, mapFunction(this.get(x, y, z), [x, y, z]));
+				}
+			}
+		}
 		return result;
 	}
 
@@ -99,13 +104,19 @@ export default class InfiniteMatrix3D {
 	}
 
 	slice(x1, y1, z1, x2, y2, z2) {
-		return this.filter((value, [x, y, z]) => {
-			return (
+		const result = new this.constructor();
+		for (const [key, value] of this.#cells.entries()) {
+			const [x, y, z] = InfiniteMatrix3D.#parseKey(key);
+			const check = (
 				x >= x1 && x <= x2 &&
 				y >= y1 && y <= y2 &&
 				z >= z1 && z <= z2
 			);
-		});
+			if (check) {
+				result.set(x, y, z, value);
+			}
+		}
+		return result;
 	}
 
 	toString() {
