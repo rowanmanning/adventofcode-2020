@@ -69,6 +69,6 @@ export default class PocketDimension4D extends InfiniteMatrix4D {
 	}
 
 	static #STATE_ACTIVE = '#';
-	static #STATE_INACTIVE = '.';
+	static #STATE_INACTIVE = null;
 
 }

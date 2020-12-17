@@ -40,6 +40,9 @@ export default class InfiniteMatrix4D {
 		this.#bounds.maxZ = Math.max(this.#bounds.maxZ, z);
 		this.#bounds.minW = Math.min(this.#bounds.minW, w);
 		this.#bounds.maxW = Math.max(this.#bounds.maxW, w);
+		if (value === null || value === undefined) {
+			return this.delete(x, y, z, w);
+		}
 		return this.#cells.set(InfiniteMatrix4D.#buildKey(x, y, z, w), value);
 	}
 
@@ -96,6 +99,7 @@ export default class InfiniteMatrix4D {
 
 	clone() {
 		const clone = new this.constructor();
+		clone.#bounds = Object.assign({}, this.#bounds);
 		clone.#cells = new Map(this.#cells);
 		return clone;
 	}

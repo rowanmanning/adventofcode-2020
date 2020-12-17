@@ -36,6 +36,9 @@ export default class InfiniteMatrix3D {
 		this.#bounds.maxY = Math.max(this.#bounds.maxY, y);
 		this.#bounds.minZ = Math.min(this.#bounds.minZ, z);
 		this.#bounds.maxZ = Math.max(this.#bounds.maxZ, z);
+		if (value === null || value === undefined) {
+			return this.delete(x, y, z);
+		}
 		return this.#cells.set(InfiniteMatrix3D.#buildKey(x, y, z), value);
 	}
 
@@ -90,6 +93,7 @@ export default class InfiniteMatrix3D {
 
 	clone() {
 		const clone = new this.constructor();
+		clone.#bounds = Object.assign({}, this.#bounds);
 		clone.#cells = new Map(this.#cells);
 		return clone;
 	}
